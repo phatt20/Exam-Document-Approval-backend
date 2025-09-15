@@ -26,17 +26,16 @@ type (
 )
 
 func (s *server) gracefulShutdown(pctx context.Context, quit <-chan os.Signal) {
-	log.Println("Start service...%s", s.cfg.App.Name)
+	log.Printf("Start service...%s", s.cfg.App.Name) // ✅ แก้ตรงนี้
 	<-quit
-	log.Println("Shutdown service...%s", s.cfg.App.Name)
+	log.Printf("Shutdown service...%s", s.cfg.App.Name) // ✅ แก้ตรงนี้
 
 	ctx, cancel := context.WithTimeout(pctx, 10*time.Second)
 	defer cancel()
 
 	if err := s.app.Shutdown(ctx); err != nil {
-		log.Fatal("Error: %v", err)
+		log.Fatalf("Error: %v", err)
 	}
-
 }
 func (s *server) httpListening() {
 	if err := s.app.Start(s.cfg.App.Url); err != http.ErrServerClosed {
